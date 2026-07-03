@@ -1,0 +1,793 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OpenAnsys Pages</title>
+  <style>
+    :root {
+      --bg: #f6f7f2;
+      --panel: #ffffff;
+      --ink: #17211f;
+      --muted: #60706d;
+      --line: #d7dfd8;
+      --accent: #0d6b5b;
+      --accent-2: #a9462d;
+      --soft: #e8f0ea;
+      --code: #101715;
+      --code-ink: #dce9e3;
+      --focus: #f2b84b;
+      --shadow: 0 18px 55px rgba(23, 33, 31, .12);
+      color-scheme: light;
+      font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(135deg, rgba(13, 107, 91, .10), transparent 36%),
+        linear-gradient(315deg, rgba(169, 70, 45, .11), transparent 42%),
+        var(--bg);
+      color: var(--ink);
+    }
+
+    button, input, textarea, select {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: .55;
+    }
+
+    a {
+      color: var(--accent);
+    }
+
+    .app {
+      width: min(1440px, 100%);
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: end;
+      padding: 8px 0 22px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(30px, 4vw, 56px);
+      line-height: .95;
+      letter-spacing: 0;
+    }
+
+    .subhead {
+      margin: 12px 0 0;
+      color: var(--muted);
+      max-width: 820px;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    .status {
+      display: grid;
+      gap: 8px;
+      min-width: 220px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, .68);
+      border-radius: 8px;
+    }
+
+    .status strong {
+      font-size: 13px;
+    }
+
+    .status span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: 420px minmax(0, 1fr);
+      gap: 20px;
+      padding-top: 20px;
+      align-items: start;
+    }
+
+    .stack {
+      display: grid;
+      gap: 16px;
+    }
+
+    .panel {
+      background: rgba(255, 255, 255, .86);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(232, 240, 234, .62);
+    }
+
+    .panel-title h2 {
+      margin: 0;
+      font-size: 15px;
+      letter-spacing: 0;
+    }
+
+    .panel-body {
+      padding: 16px;
+      display: grid;
+      gap: 14px;
+    }
+
+    label {
+      display: grid;
+      gap: 7px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
+      color: var(--ink);
+      padding: 11px 12px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 170px;
+      resize: vertical;
+      line-height: 1.55;
+    }
+
+    input:focus, textarea:focus, select:focus, button:focus-visible {
+      outline: 3px solid rgba(242, 184, 75, .55);
+      outline-offset: 2px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .mode-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .mode {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 9px;
+      align-items: start;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .mode input {
+      width: auto;
+      margin-top: 3px;
+      accent-color: var(--accent);
+    }
+
+    .mode b {
+      display: block;
+      color: var(--ink);
+      font-size: 13px;
+      margin-bottom: 3px;
+    }
+
+    .mode span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .drop {
+      border: 1px dashed #9bad9f;
+      background: var(--soft);
+      border-radius: 8px;
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .drop input {
+      background: transparent;
+      border: 0;
+      padding: 0;
+    }
+
+    .files {
+      display: grid;
+      gap: 8px;
+    }
+
+    .file-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+      padding: 9px 10px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .file-row strong {
+      color: var(--ink);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .primary, .secondary, .ghost {
+      min-height: 42px;
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-weight: 700;
+    }
+
+    .primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .secondary {
+      background: var(--ink);
+      color: #fff;
+    }
+
+    .ghost {
+      background: #fff;
+      color: var(--ink);
+      border: 1px solid var(--line);
+    }
+
+    .result-shell {
+      min-height: calc(100vh - 190px);
+      display: grid;
+      grid-template-rows: auto minmax(380px, 1fr);
+    }
+
+    .output-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .output-meta {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    pre {
+      margin: 0;
+      min-height: 380px;
+      max-height: calc(100vh - 284px);
+      overflow: auto;
+      background: var(--code);
+      color: var(--code-ink);
+      padding: 18px;
+      line-height: 1.55;
+      font-size: 13px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      border-radius: 0 0 8px 8px;
+    }
+
+    .log {
+      min-height: 72px;
+      max-height: 140px;
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
+      padding: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .meter {
+      height: 8px;
+      background: #dce6df;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .meter span {
+      display: block;
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      transition: width .25s ease;
+    }
+
+    @media (max-width: 980px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+
+      header {
+        grid-template-columns: 1fr;
+      }
+
+      .status {
+        min-width: 0;
+      }
+
+      pre {
+        max-height: none;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .app {
+        padding: 16px;
+      }
+
+      .grid-2, .output-head {
+        grid-template-columns: 1fr;
+      }
+
+      .actions button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div>
+        <h1>OpenAnsys Pages</h1>
+        <p class="subhead">纯静态建模助手。浏览器直接调用 OpenAI-compatible API，根据工程描述、文本文件和图纸图片生成 APDL、Stage 2 导出脚本或 LS-DYNA K 草案。</p>
+      </div>
+      <div class="status" aria-live="polite">
+        <strong id="stateText">待配置</strong>
+        <span id="stateDetail">API Key 只保存在当前浏览器会话中。</span>
+        <div class="meter" aria-hidden="true"><span id="meterBar"></span></div>
+      </div>
+    </header>
+
+    <main>
+      <section class="stack">
+        <div class="panel">
+          <div class="panel-title">
+            <h2>API</h2>
+          </div>
+          <div class="panel-body">
+            <label>
+              Base URL
+              <input id="baseUrl" autocomplete="off" spellcheck="false" value="https://api.openai.com/v1">
+            </label>
+            <label>
+              API Key
+              <input id="apiKey" type="password" autocomplete="off" spellcheck="false" placeholder="sk-...">
+            </label>
+            <div class="grid-2">
+              <label>
+                Model
+                <input id="model" autocomplete="off" spellcheck="false" value="gpt-4.1">
+              </label>
+              <label>
+                Temperature
+                <input id="temperature" type="number" min="0" max="1" step="0.1" value="0.2">
+              </label>
+            </div>
+            <p class="small">公开仓库不要写死密钥。部分转发 API 可能未开放浏览器 CORS，遇到网络拦截需要换支持 CORS 的 API 地址。</p>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">
+            <h2>任务</h2>
+          </div>
+          <div class="panel-body">
+            <div class="mode-list" role="radiogroup" aria-label="建模目标">
+              <label class="mode">
+                <input type="radio" name="mode" value="stage1" checked>
+                <span><b>APDL 建模与网格</b>生成可在 ANSYS 19.0 中执行的 Stage 1 APDL。</span>
+              </label>
+              <label class="mode">
+                <input type="radio" name="mode" value="stage2">
+                <span><b>LS-DYNA 导出脚本</b>生成从已有模型导出 K 文件的 Stage 2 APDL。</span>
+              </label>
+              <label class="mode">
+                <input type="radio" name="mode" value="keyword">
+                <span><b>K 文件草案</b>生成 LS-DYNA keyword deck 结构草案。</span>
+              </label>
+              <label class="mode">
+                <input type="radio" name="mode" value="repair">
+                <span><b>错误修复</b>根据 APDL 与 .err/.out 内容修复脚本。</span>
+              </label>
+            </div>
+
+            <label>
+              工程描述
+              <textarea id="prompt" placeholder="描述结构类型、尺寸、材料、约束、载荷、网格要求、目标输出等。"></textarea>
+            </label>
+
+            <label>
+              现有 APDL / 错误日志
+              <textarea id="context" placeholder="修复模式可粘贴 APDL、.err、ansys.out；其他模式可粘贴补充资料。"></textarea>
+            </label>
+
+            <div class="drop">
+              <label>
+                输入文件
+                <input id="fileInput" type="file" multiple accept=".txt,.md,.json,.apdl,.inp,.err,.out,.k,.key,.png,.jpg,.jpeg,.webp">
+              </label>
+              <div id="files" class="files"></div>
+            </div>
+
+            <div class="actions">
+              <button id="runBtn" class="primary">生成</button>
+              <button id="clearBtn" class="ghost" type="button">清空</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">
+            <h2>日志</h2>
+          </div>
+          <div class="panel-body">
+            <div id="log" class="log">页面已就绪。</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel result-shell">
+        <div class="panel-title output-head">
+          <div>
+            <h2>结果</h2>
+            <div id="outputMeta" class="output-meta">尚未生成。</div>
+          </div>
+          <div class="actions">
+            <button id="copyBtn" class="ghost" type="button">复制</button>
+          </div>
+        </div>
+        <pre id="output" tabindex="0">生成内容会显示在这里。</pre>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const stateText = $("stateText");
+    const stateDetail = $("stateDetail");
+    const meterBar = $("meterBar");
+    const logEl = $("log");
+    const outputEl = $("output");
+    const outputMeta = $("outputMeta");
+    const filesEl = $("files");
+
+    let loadedFiles = [];
+    let lastOutput = "";
+    let lastMode = "stage1";
+
+    const textExtensions = new Set(["txt", "md", "json", "apdl", "inp", "err", "out", "k", "key"]);
+    const imageTypes = new Set(["image/png", "image/jpeg", "image/webp"]);
+
+    const modeConfig = {
+      stage1: {
+        title: "APDL 建模与网格",
+        ext: "apdl",
+        system: [
+          "You are OpenAnsys Pages, an engineering modeling assistant.",
+          "Generate ANSYS 19.0 Mechanical APDL for Stage 1 modeling and meshing.",
+          "Return only raw APDL. Do not wrap in Markdown. Do not add prose.",
+          "The APDL should define geometry, material, element type, mesh sizing, meshing, constraints/load placeholders when given, SAVE the database, and FINISH.",
+          "Prefer explicit, conservative APDL that can be inspected and edited."
+        ].join("\\n")
+      },
+      stage2: {
+        title: "LS-DYNA 导出脚本",
+        ext: "apdl",
+        system: [
+          "You are OpenAnsys Pages, an ANSYS to LS-DYNA export assistant.",
+          "Generate Stage 2 ANSYS 19.0 APDL intended to resume/reuse a solved or meshed model and export an LS-DYNA keyword deck.",
+          "Return only raw APDL. Do not wrap in Markdown. Do not add prose.",
+          "Do not manually write the complete keyword deck with *CFWRITE loops unless no ANSYS export route is available.",
+          "Include clear output path placeholders and finish cleanly."
+        ].join("\\n")
+      },
+      keyword: {
+        title: "K 文件草案",
+        ext: "k",
+        system: [
+          "You are OpenAnsys Pages, an LS-DYNA keyword deck drafting assistant.",
+          "Generate a structurally coherent LS-DYNA .k keyword deck draft based on the supplied engineering description.",
+          "Return only keyword deck text. Do not wrap in Markdown. Do not add prose.",
+          "Include *KEYWORD, *TITLE, relevant *CONTROL, *DATABASE, *MAT, *SECTION, *PART, node/element placeholders if exact mesh is unavailable, boundary/load placeholders, and *END."
+        ].join("\\n")
+      },
+      repair: {
+        title: "错误修复",
+        ext: "apdl",
+        system: [
+          "You are OpenAnsys Pages, an APDL repair assistant.",
+          "Given APDL and ANSYS .err/.out diagnostics, return a repaired ANSYS 19.0 APDL command stream.",
+          "Return only raw APDL. Do not wrap in Markdown. Do not add prose.",
+          "Preserve modeling intent while fixing commands, selections, element definitions, mesh steps, paths, and export flow."
+        ].join("\\n")
+      }
+    };
+
+    restoreSettings();
+    updateState("待配置", "填写 API Key 后即可生成。", 0);
+
+    $("fileInput").addEventListener("change", async (event) => {
+      loadedFiles = [];
+      filesEl.innerHTML = "";
+      const files = Array.from(event.target.files || []);
+      if (!files.length) return;
+      updateState("读取文件", `正在读取 ${files.length} 个文件。`, 20);
+      for (const file of files) {
+        const ext = extensionOf(file.name);
+        if (textExtensions.has(ext)) {
+          const text = await file.text();
+          loadedFiles.push({ name: file.name, type: "text", size: file.size, text: text.slice(0, 24000) });
+        } else if (imageTypes.has(file.type)) {
+          const dataUrl = await readAsDataUrl(file);
+          loadedFiles.push({ name: file.name, type: "image", size: file.size, dataUrl });
+        } else {
+          loadedFiles.push({ name: file.name, type: "skipped", size: file.size });
+        }
+      }
+      renderFiles();
+      updateState("文件已载入", `${loadedFiles.length} 个文件进入上下文。`, 42);
+      appendLog(`已读取 ${loadedFiles.length} 个文件。`);
+    });
+
+    $("runBtn").addEventListener("click", runGeneration);
+    $("clearBtn").addEventListener("click", () => {
+      $("prompt").value = "";
+      $("context").value = "";
+      $("fileInput").value = "";
+      loadedFiles = [];
+      filesEl.innerHTML = "";
+      setOutput("生成内容会显示在这里。", "尚未生成。");
+      appendLog("已清空输入。");
+      updateState("待输入", "可以重新填写任务。", 0);
+    });
+    $("copyBtn").addEventListener("click", async () => {
+      await navigator.clipboard.writeText(lastOutput || outputEl.textContent);
+      appendLog("结果已复制。");
+    });
+
+    async function runGeneration() {
+      const apiKey = $("apiKey").value.trim();
+      const baseUrl = $("baseUrl").value.trim().replace(/\\/+$/, "");
+      const model = $("model").value.trim();
+      const temperature = Number($("temperature").value || 0.2);
+      const prompt = $("prompt").value.trim();
+      const extraContext = $("context").value.trim();
+      const mode = document.querySelector("input[name='mode']:checked").value;
+      const config = modeConfig[mode];
+      lastMode = mode;
+
+      if (!apiKey || !baseUrl || !model) {
+        updateState("配置不完整", "请填写 Base URL、API Key 和 Model。", 0);
+        appendLog("缺少 API 配置。");
+        return;
+      }
+      if (!prompt && !extraContext && !loadedFiles.length) {
+        updateState("输入为空", "请填写描述或上传文件。", 0);
+        appendLog("没有可提交的任务内容。");
+        return;
+      }
+
+      saveSettings();
+      $("runBtn").disabled = true;
+      updateState("请求中", `正在调用 ${model}。`, 58);
+      setOutput("正在生成，请稍候...", `${config.title} · 请求已发送`);
+      appendLog(`开始生成：${config.title}`);
+
+      try {
+        const messages = buildMessages(config, prompt, extraContext);
+        const body = { model, messages, temperature, stream: false };
+        const response = await fetch(`${baseUrl}/chat/completions`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${apiKey}`
+          },
+          body: JSON.stringify(body)
+        });
+
+        const raw = await response.text();
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${raw.slice(0, 1200)}`);
+        }
+        const payload = JSON.parse(raw);
+        const content = extractContent(payload).trim();
+        if (!content) throw new Error("API 返回为空。");
+        lastOutput = stripFences(content);
+        setOutput(lastOutput, `${config.title} · ${charCount(lastOutput)} 字符`);
+        updateState("生成完成", "结果已可直接复制使用。", 100);
+        appendLog("生成完成。");
+      } catch (error) {
+        const message = error && error.message ? error.message : String(error);
+        setOutput(message, "请求失败");
+        updateState("请求失败", "检查 CORS、Base URL、Key 或模型名。", 0);
+        appendLog(message);
+      } finally {
+        $("runBtn").disabled = false;
+      }
+    }
+
+    function buildMessages(config, prompt, extraContext) {
+      const content = [];
+      const textParts = [];
+      textParts.push(`Task mode: ${config.title}`);
+      if (prompt) textParts.push(`Engineering request:\\n${prompt}`);
+      if (extraContext) textParts.push(`Additional context / existing APDL / diagnostics:\\n${extraContext}`);
+
+      const fileText = loadedFiles
+        .filter((file) => file.type === "text")
+        .map((file) => `--- FILE: ${file.name} ---\\n${file.text}`)
+        .join("\\n\\n");
+      if (fileText) textParts.push(`Uploaded text files:\\n${fileText}`);
+
+      const skipped = loadedFiles.filter((file) => file.type === "skipped").map((file) => file.name);
+      if (skipped.length) textParts.push(`Skipped unsupported files: ${skipped.join(", ")}`);
+
+      content.push({ type: "text", text: textParts.join("\\n\\n") });
+
+      for (const image of loadedFiles.filter((file) => file.type === "image")) {
+        content.push({ type: "text", text: `Image drawing: ${image.name}` });
+        content.push({ type: "image_url", image_url: { url: image.dataUrl } });
+      }
+
+      return [
+        { role: "system", content: config.system },
+        { role: "user", content }
+      ];
+    }
+
+    function extractContent(payload) {
+      const message = payload && payload.choices && payload.choices[0] && payload.choices[0].message;
+      const content = message && message.content;
+      if (typeof content === "string") return content;
+      if (Array.isArray(content)) {
+        return content.map((part) => part.text || "").join("");
+      }
+      return "";
+    }
+
+    function stripFences(text) {
+      const trimmed = text.trim();
+      if (!trimmed.startsWith("```")) return trimmed;
+      return trimmed
+        .replace(/^```[a-zA-Z0-9_-]*\\s*/, "")
+        .replace(/```$/, "")
+        .trim();
+    }
+
+    function renderFiles() {
+      filesEl.innerHTML = "";
+      for (const file of loadedFiles) {
+        const row = document.createElement("div");
+        row.className = "file-row";
+        row.innerHTML = `<strong title="${escapeHtml(file.name)}">${escapeHtml(file.name)}</strong><span>${file.type} · ${formatBytes(file.size)}</span>`;
+        filesEl.appendChild(row);
+      }
+    }
+
+    function readAsDataUrl(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(reader.error);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function extensionOf(name) {
+      const idx = name.lastIndexOf(".");
+      return idx === -1 ? "" : name.slice(idx + 1).toLowerCase();
+    }
+
+    function setOutput(text, meta) {
+      outputEl.textContent = text;
+      outputMeta.textContent = meta;
+      lastOutput = text;
+    }
+
+    function updateState(title, detail, percent) {
+      stateText.textContent = title;
+      stateDetail.textContent = detail;
+      meterBar.style.width = `${Math.max(0, Math.min(100, percent))}%`;
+    }
+
+    function appendLog(text) {
+      const line = `[${new Date().toLocaleTimeString()}] ${text}`;
+      logEl.textContent = logEl.textContent === "页面已就绪。" ? line : `${logEl.textContent}\\n${line}`;
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    function saveSettings() {
+      sessionStorage.setItem("openansys_base_url", $("baseUrl").value.trim());
+      sessionStorage.setItem("openansys_model", $("model").value.trim());
+      sessionStorage.setItem("openansys_temperature", $("temperature").value);
+    }
+
+    function restoreSettings() {
+      $("baseUrl").value = sessionStorage.getItem("openansys_base_url") || $("baseUrl").value;
+      $("model").value = sessionStorage.getItem("openansys_model") || $("model").value;
+      $("temperature").value = sessionStorage.getItem("openansys_temperature") || $("temperature").value;
+    }
+
+    function escapeHtml(text) {
+      return text.replace(/[&<>"']/g, (ch) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      }[ch]));
+    }
+
+    function formatBytes(bytes) {
+      if (bytes < 1024) return `${bytes} B`;
+      if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+      return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+    }
+
+    function charCount(text) {
+      return new Intl.NumberFormat("zh-CN").format([...text].length);
+    }
+
+  </script>
+</body>
+</html>
